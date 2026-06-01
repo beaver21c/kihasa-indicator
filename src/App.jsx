@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import RegionReport from './pages/RegionReport';
 import CustomReport from './pages/CustomReport';
+import TrendReport from './pages/TrendReport';
 
 // GitHub Pages 하위경로 대응: basename = import.meta.env.BASE_URL ('/kihasa-indicator/')
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/region" element={<RegionReport />} />
             <Route path="/custom" element={<CustomReport />} />
+            <Route path="/trend" element={<TrendReport />} />
           </Routes>
         </main>
         <div className="px-4">
