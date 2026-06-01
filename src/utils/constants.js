@@ -32,3 +32,15 @@ export const CMP_OPTIONS = [
 
 // 브랜드 컬러 (헤더/배너)
 export const BRAND = '#1a4f8a';
+
+// 연도별 추이: 복수 지역 최대 선택 수
+export const TREND_MAX_REGIONS = 5;
+
+// 연도별 추이: 지역별 고정 색 팔레트 (최대 5색)
+export const TREND_PALETTE = ['#1a4f8a', '#c0392b', '#27ae60', '#e67e22', '#8e44ad'];
+
+// 연도별 추이: 비교 모드
+export const TREND_MODES = [
+  ['single', '단일 지역 vs 비교집단'],
+  ['multi', '복수 지역 직접 비교'],
+];

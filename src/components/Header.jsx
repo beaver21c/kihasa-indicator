@@ -24,6 +24,9 @@ export default function Header() {
         <Link to="/custom" className="px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 transition">
           지역맞춤
         </Link>
+        <Link to="/trend" className="px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 transition">
+          연도별 추이
+        </Link>
       </nav>
     </header>
   );

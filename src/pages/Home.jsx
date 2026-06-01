@@ -46,7 +46,7 @@ export default function Home() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <section className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+      <section className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
         <EntryCard
           to="/region"
           emoji="🏙️"
@@ -60,6 +60,13 @@ export default function Home() {
           title="지역맞춤 리포트"
           desc="254개 전체 지표 중 최대 20개를 직접 선택해 비교"
           points={['영역·연도·지표명 검색 필터', '체크박스 다중 선택(최대 20개)', '선택 구성 그대로 PNG 저장']}
+        />
+        <EntryCard
+          to="/trend"
+          emoji="📈"
+          title="연도별 추이"
+          desc="2018~2024 연도별 추이를 지역·비교집단 기준으로 비교"
+          points={['복수 지역(최대 5) 직접 비교 / 단일 vs 비교집단', '선·막대 전환, 지표별 Y축 자동 스케일', '카드 클릭 확대 + 두 지표 보조축 겹쳐보기']}
         />
       </section>
 
