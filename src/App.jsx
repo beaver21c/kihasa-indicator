@@ -11,6 +11,7 @@ const TrendReport = lazy(() => import('./pages/TrendReport'));
 const IndicatorMap = lazy(() => import('./pages/IndicatorMap'));
 const IndicatorBuilder = lazy(() => import('./pages/IndicatorBuilder'));
 const MapAnalysis = lazy(() => import('./pages/MapAnalysis'));
+const Guide = lazy(() => import('./pages/Guide'));
 
 // 단일 HTML(폐쇄망) 빌드는 file:// 에서 열리므로 HashRouter를 쓴다.
 const SINGLE = typeof __SINGLE_FILE__ !== 'undefined' && __SINGLE_FILE__;
@@ -40,6 +41,7 @@ function Shell() {
             <Route path="/indicator-map" element={<IndicatorMap />} />
             <Route path="/builder" element={<IndicatorBuilder />} />
             <Route path="/map" element={<MapAnalysis />} />
+            <Route path="/guide" element={<Guide />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Suspense>

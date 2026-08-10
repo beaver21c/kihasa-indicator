@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { loadRegion } from '../utils/dataLoader';
+import { BRAND } from '../utils/constants';
 
 function Metric({ label, value, sub }) {
   return (
@@ -47,12 +48,21 @@ export default function Home() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <section className="mt-4 rounded-lg border border-slate-200 bg-white px-5 py-4">
-        <h2 className="text-sm font-bold text-slate-700">통합 안내</h2>
-        <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-          「지역사회보장지표 종합분석 대시보드」와 「지역사회보장계획 수립을 위한 GIS분석(읍면동 코로플레스 맵)」을
-          하나의 서비스로 통합했다. 지표 분석 5종과 GIS 지도분석 1종을 같은 화면 체계·같은 주소에서 사용한다.
-        </p>
+      <section className="mt-4 rounded-lg border border-slate-200 bg-white px-5 py-4 flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h2 className="text-sm font-bold text-slate-700">통합 안내</h2>
+          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+            「지역사회보장지표 종합분석 대시보드」와 「지역사회보장계획 수립을 위한 GIS분석(읍면동 코로플레스 맵)」을
+            하나의 서비스로 통합했다. 지표 분석 5종과 GIS 지도분석 1종을 같은 화면 체계·같은 주소에서 사용한다.
+          </p>
+        </div>
+        <Link
+          to="/guide"
+          className="shrink-0 px-3 py-2 rounded-md text-xs font-semibold text-white"
+          style={{ backgroundColor: BRAND }}
+        >
+          📖 이용안내 보기
+        </Link>
       </section>
 
       <section className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

@@ -82,6 +82,19 @@ async function goto(path, waitSel, label) {
 /* ---------- 1. 홈 ---------- */
 await goto('', 'text=통합 안내', '홈 진입');
 log('홈 기능 카드 6종', (await page.locator('a:has-text("바로가기 →")').count()) === 6);
+log('홈 이용안내 링크', (await page.locator('a:has-text("이용안내 보기")').count()) === 1);
+
+/* ---------- 1-2. 이용안내 ---------- */
+if (await goto('guide', 'text=이용 안내', '이용안내 화면 진입')) {
+  const secs = await page.locator('section[id]').count();
+  log('안내 섹션 8종', secs === 8, `${secs}개`);
+  const links = await page.locator('a:has-text("화면 열기 →")').count();
+  log('각 화면 바로가기 링크', links === 6, `${links}개`);
+  errors = [];
+  await page.locator('nav a[href="#builder"]').click();
+  await page.waitForTimeout(500);
+  log('목차 앵커 이동', errors.length === 0, E());
+}
 
 /* ---------- 2. 지역중심 리포트 ---------- */
 if (await goto('region', '.js-plotly-plot', '지역중심 리포트 진입')) {
@@ -310,7 +323,7 @@ if (await goto('map', '.leaflet-container', 'GIS 지도분석 진입')) {
   log('데이터 양식 xlsx 다운로드', !!ed, ed ? await ed.suggestedFilename() : 'download 없음 / ' + E());
   errors = [];
   await page.locator('button:has-text("이용 가이드")').click();
-  await page.waitForSelector('text=전체 이용 가이드', { timeout: 10000 });
+  await page.waitForSelector('text=GIS 지도분석 이용 가이드', { timeout: 10000 });
   await page.locator('button:has-text("시작하기")').click();
   await page.waitForTimeout(500);
   log('이용 가이드 모달', errors.length === 0, E());

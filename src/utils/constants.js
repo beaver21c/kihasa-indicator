@@ -8,6 +8,7 @@ export const NAV_ITEMS = [
   { to: '/indicator-map', label: '지표 지도', short: '지표지도' },
   { to: '/builder', label: '지표 만들기', short: '만들기' },
   { to: '/map', label: 'GIS 지도분석', short: 'GIS' },
+  { to: '/guide', label: '이용안내', short: '안내' },
 ];
 
 // 7대 유형 라벨 (시군구 유형)

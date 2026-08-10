@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 /**
- * 전체 이용 가이드 모달.
- * 우측 상단 "이용 가이드" 버튼으로 열림. 처음 사용자를 위한 서비스 소개·기능설명·빠른시작·카카오 API 안내.
+ * GIS 지도분석 이용 가이드 모달.
+ * 화면 상단 "이용 가이드" 버튼으로 열림. 이 화면(코로플레스 맵)의 사용법과 지오코딩 API 안내를 담는다.
+ * 플랫폼 전체(지표 분석 5종 포함) 안내는 /guide 화면에 있다.
  */
 export default function ServiceGuide({ open, onClose }) {
   useEffect(() => {
@@ -25,7 +27,7 @@ export default function ServiceGuide({ open, onClose }) {
       >
         {/* 헤더 */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200 sticky top-0 bg-white rounded-t-lg">
-          <h2 className="text-base font-bold text-slate-800">📖 전체 이용 가이드</h2>
+          <h2 className="text-base font-bold text-slate-800">📖 GIS 지도분석 이용 가이드</h2>
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-100 text-slate-500 text-lg"
@@ -39,12 +41,21 @@ export default function ServiceGuide({ open, onClose }) {
         <div className="px-5 py-4 text-sm text-slate-700 leading-relaxed space-y-5">
           {/* 1. 서비스 소개 */}
           <section>
-            <h3 className="font-bold text-slate-800 mb-1">이 서비스는?</h3>
+            <h3 className="font-bold text-slate-800 mb-1">이 화면은?</h3>
             <p>
               <b>지역사회보장계획 수립을 위한 GIS 분석 도구</b>입니다.
               행정구역(시군구·읍면동)별 통계값을 <b>색 농담(코로플레스)</b>으로 지도에 칠하고,
               복지관·센터 등 <b>기관의 위치를 점으로</b> 함께 표시한 뒤,
               결과를 <b>PNG 이미지로 내보낼</b> 수 있습니다. 별도 설치 없이 브라우저에서 동작합니다.
+            </p>
+            <p className="mt-1.5 text-[13px] text-slate-500">
+              ※ 이 화면은 <b>내가 가진 데이터</b>를 지도로 만드는 도구입니다. 지역사회보장지표를 바로 지도로
+              보려면 상단 <b>지표 지도</b>를, 지표를 조합해 새로 만들려면 <b>지표 만들기</b>를 쓰세요.
+              플랫폼 전체 안내는{' '}
+              <Link to="/guide" className="text-brand-700 underline" onClick={onClose}>
+                이용안내
+              </Link>{' '}
+              화면에 있습니다.
             </p>
           </section>
 
@@ -104,7 +115,7 @@ export default function ServiceGuide({ open, onClose }) {
           </section>
 
           <p className="text-[12px] text-slate-400 pt-1 border-t border-slate-100">
-            한국보건사회연구원 · 읍면동 단위 코로플레스 맵
+            한국보건사회연구원 · 지역사회보장 종합분석 플랫폼 · 읍면동 단위 코로플레스 맵
           </p>
         </div>
 

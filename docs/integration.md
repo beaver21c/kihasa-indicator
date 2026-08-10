@@ -20,7 +20,7 @@
 | `src/components/ExportButton.jsx` | `src/map/components/ExportButton.jsx` | 그대로 (클린 PNG · 1x/2x/3x · 제목박스 · 워터마크 · 범례) |
 | `src/components/ResetButton.jsx` | `src/map/components/ResetButton.jsx` | 그대로 |
 | `src/components/Legend.jsx` | `src/map/components/Legend.jsx` | 그대로 |
-| `src/components/ServiceGuide.jsx` | `src/map/components/ServiceGuide.jsx` | 그대로 (전체 이용 가이드 모달) |
+| `src/components/ServiceGuide.jsx` | `src/map/components/ServiceGuide.jsx` | GIS 화면 전용 가이드로 문구 조정 + `/guide` 안내 링크 추가 |
 | `src/components/UsageGuide.jsx` | `src/map/components/UsageGuide.jsx` | 그대로 (①~⑤ 진행 단계 바) |
 | `src/components/ErrorBoundary.jsx` | `src/map/components/ErrorBoundary.jsx` | 그대로 |
 | `src/hooks/useGeoData.js` | `src/map/hooks/useGeoData.js` | 공통 `dataLoader` 사용 + 경로 변경 + 로딩 시 이전 경계 비움 |
@@ -41,7 +41,8 @@
 | `dist-single/` (약 9.7MB 빌드 산출물) | 빌드 산출물. `npm run build:embedded` 로 언제든 재생성 |
 | `public/templates/*.xlsx` (`~$` 잠금 파일 포함) | 코드에서 참조되지 않는 잔여 파일. 양식은 `excelTemplate.js` 가 실행 시 생성 |
 | `__perm_test.txt` | 권한 테스트용 잔여 파일 |
-| `PHASE*_REPORT.md`, `DEPLOY_*`, `REQUESTS_HISTORY.md`, `REVISION_REPORT.md` | 개발 이력 문서. 서비스 동작과 무관 |
+| `PHASE*_REPORT.md`, `REQUESTS_HISTORY.md`, `REVISION_REPORT.md` | 개발 이력 문서. 서비스 동작과 무관 |
+| `DEPLOY_GUIDE.md`, `DEPLOY_VERIFY_CHECKLIST.md` | 최초 저장소 생성·PAT 발급 등 1회성 절차. 필요한 운영 내용은 [`deploy.md`](deploy.md)로 재작성 |
 
 ### 이관 중 수정한 결함 (rcssp_map 원본에도 존재)
 
@@ -66,6 +67,7 @@
 | 영역 그룹 접기 | `/region` 카테고리 헤더 클릭 | |
 | 지표별 최신값 + 연도 배지 | `pickYearBlock` + `IndicatorRow` 배지 | 생산 주기 차이(2024·2023 혼재) 대응 |
 | 계급 구간·단순평균 주의 문구 | 각 화면 하단 주석 | |
+| 서비스 전체 이용 안내 | `/guide` (`src/pages/Guide.jsx`) + [`user-guide.md`](user-guide.md) | rcssp_map README의 사용 방법·엑셀 양식 가이드·FAQ를 흡수해 6종 화면 기준으로 재작성 |
 | Plotly 기본 지형 CDN 의존 제거 | `public/data/topojson/world_110m.json` 동봉 + `PlotlyGeoAssets` 사전 주입 | 내부망·`file://` 에서도 단계구분도 렌더 |
 
 ### 이식하지 않은 것
@@ -83,3 +85,5 @@
 |---|---|
 | `https://beaver21c.github.io/rcssp_map/` | `https://beaver21c.github.io/kihasa-indicator/map` |
 | `rcssp_map` 단일 HTML | `npm run build:embedded` → `dist-single/index_embedded.html` (지표 기능 포함) |
+| rcssp_map README의 사용 설명·FAQ | [`user-guide.md`](user-guide.md) 6~8장 + 서비스 안 `이용안내` 화면 |
+| rcssp_map `DEPLOY_GUIDE.md` | [`deploy.md`](deploy.md) |
