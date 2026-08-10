@@ -26,28 +26,53 @@ export function calcStats(values) {
   };
 }
 
+// 비교기준(광역 / 유형 / 전국)에 해당하는 시군구 코드 목록
+// 조건을 만족하지 않으면 null (예: 유형 비교인데 대상 시군구 유형 정보 없음)
+export function getGroupCodes(areas, cmpMode, curSido, curSgg) {
+  if (cmpMode === 'sido') {
+    return Object.entries(areas)
+      .filter(([, a]) => a.sido === curSido)
+      .map(([c]) => c);
+  }
+  if (cmpMode === 'national') return Object.keys(areas);
+  if (cmpMode === 'type' && curSgg) {
+    const myType = areas[curSgg]?.type7;
+    if (!myType) return null;
+    return Object.entries(areas)
+      .filter(([, a]) => a.type7 === myType)
+      .map(([c]) => c);
+  }
+  return null;
+}
+
 // 비교기준별 통계 (광역 / 유형 / 전국)
 // rawData: { 지자체코드(5자리): 값 } 형태의 평탄화 맵
 export function getCmpStats(rawData, areas, cmpMode, curSido, curSgg) {
   if (!rawData) return null;
-  let codes;
-  if (cmpMode === 'sido') {
-    codes = Object.entries(areas)
-      .filter(([, a]) => a.sido === curSido)
-      .map(([c]) => c);
-  } else if (cmpMode === 'national') {
-    codes = Object.keys(areas);
-  } else if (cmpMode === 'type' && curSgg) {
-    const myType = areas[curSgg]?.type7;
-    if (!myType) return null;
-    codes = Object.entries(areas)
-      .filter(([, a]) => a.type7 === myType)
-      .map(([c]) => c);
-  } else {
-    return null;
-  }
+  const codes = getGroupCodes(areas, cmpMode, curSido, curSgg);
+  if (!codes) return null;
   const vals = codes.map((c) => rawData[c]).filter((v) => v != null && !isNaN(v));
   return calcStats(vals);
+}
+
+// 원자료에는 연도 키는 있으나 내용이 비어 있는 블록({})이 섞여 있다.
+// 선택 연도에 값이 없으면 그 이전의 가장 최근 유효 연도를 돌려준다(없으면 null).
+export function pickYearBlock(indicator, year) {
+  const by = indicator?.data_by_year || {};
+  const filled = (y) => by[y] && Object.keys(by[y]).length > 0;
+  if (filled(year)) return year;
+  const prev = Object.keys(by)
+    .filter((y) => y <= year && filled(y))
+    .sort();
+  return prev.length ? prev[prev.length - 1] : null;
+}
+
+// 지표에 유효 데이터가 있는 연도 목록
+export function filledYears(indicator) {
+  const by = indicator?.data_by_year || {};
+  return Object.keys(by)
+    .filter((y) => Object.keys(by[y]).length > 0)
+    .sort();
 }
 
 // 지역중심: 한 지표/한 연도의 시군구 값을 모든 시도에서 평탄화

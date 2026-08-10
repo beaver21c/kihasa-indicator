@@ -12,7 +12,16 @@ function fmt(v) {
 
 // 확대 모달: 큰 차트 + 선/막대 토글 + 두 번째 지표 겹쳐보기(보조축) + 연도별 수치표
 // props: indicator, indicators(전체), buildTrend(ind)=>trend, mode, defaultChartType, onClose
-export default function TrendModal({ indicator, indicators, buildTrend, mode, defaultChartType, onClose }) {
+export default function TrendModal({
+  indicator,
+  indicators,
+  buildTrend,
+  mode,
+  defaultChartType,
+  showValues,
+  valueFontSize,
+  onClose,
+}) {
   const [chartType, setChartType] = useState(defaultChartType);
   const [secName, setSecName] = useState('');
   const [secType, setSecType] = useState('bar');
@@ -81,7 +90,15 @@ export default function TrendModal({ indicator, indicators, buildTrend, mode, de
 
         {/* 차트 */}
         <div className="px-3">
-          <TrendChart trend={trend} mode={mode} chartType={chartType} unit={indicator.unit} secondary={secondary} />
+          <TrendChart
+            trend={trend}
+            mode={mode}
+            chartType={chartType}
+            unit={indicator.unit}
+            secondary={secondary}
+            showValues={showValues}
+            valueFontSize={valueFontSize}
+          />
         </div>
 
         {/* 연도별 수치표 */}

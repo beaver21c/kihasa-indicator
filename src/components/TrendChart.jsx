@@ -1,5 +1,27 @@
 import Plot from '../utils/plot';
 import { COLORS, TREND_PALETTE } from '../utils/constants';
+import { fmt } from '../utils/format';
+
+// 그래프 위에 값 직접 표기 (Q1~Q3 밴드 등 보조 도형에는 붙이지 않음)
+function withValues(traces, on, size) {
+  if (!on) return traces;
+  return traces.map((t) => {
+    if (t.hoverinfo === 'skip' || t.fill || (t.line && t.line.width === 0)) return t;
+    if (!Array.isArray(t.y)) return t;
+    const text = t.y.map((v) => (v == null ? '' : fmt(v)));
+    const font = { size: size || 9, color: '#42505f', family: 'Noto Sans KR' };
+    if (t.type === 'bar') return { ...t, text, textposition: 'outside', textfont: font, cliponaxis: false };
+    const md = t.mode || 'lines';
+    return {
+      ...t,
+      mode: md.includes('text') ? md : `${md}+text`,
+      text,
+      textposition: 'top center',
+      textfont: font,
+      cliponaxis: false,
+    };
+  });
+}
 
 // 연도별 추이 차트 (선/막대 + Q1~Q3 음영밴드 + 이중 Y축 자동 스케일)
 // props:
@@ -10,6 +32,7 @@ import { COLORS, TREND_PALETTE } from '../utils/constants';
 //  compact   : 미니 카드용(범례/축타이틀 축소)
 //  showRefLine: 복수 모드 전국평균 점선 표시
 //  secondary : { trend, chartType, unit, name } 이중축 겹쳐보기(모달)
+//  showValues/valueFontSize : 그래프 위 값 직접 표기(기본 꺼짐) + 글자 크기(pt)
 export default function TrendChart({
   trend,
   mode,
@@ -18,6 +41,8 @@ export default function TrendChart({
   compact = false,
   showRefLine = false,
   secondary = null,
+  showValues = false,
+  valueFontSize = 9,
 }) {
   if (!trend) return null;
   const xs = trend.years.map(String);
@@ -68,9 +93,13 @@ export default function TrendChart({
     });
   }
 
+  // 값 표기를 켜면 글자 크기에 맞춰 높이·상단 여백을 늘려 라벨이 잘리지 않게 한다.
+  const grow = showValues ? Math.max(0, Math.round((valueFontSize - 9) * 4)) : 0;
   const layout = {
-    height: compact ? 168 : 430,
-    margin: compact ? { l: 42, r: 10, t: 6, b: 26 } : { l: 56, r: secondary ? 56 : 18, t: 28, b: 44 },
+    height: (compact ? 168 : 430) + grow,
+    margin: compact
+      ? { l: 42, r: 10, t: 6 + grow, b: 26 }
+      : { l: 56, r: secondary ? 56 : 18, t: 28 + grow, b: 44 },
     showlegend: !compact,
     legend: { orientation: 'h', y: -0.16, x: 0, font: { size: 11 } },
     paper_bgcolor: 'white',
@@ -102,7 +131,7 @@ export default function TrendChart({
 
   return (
     <Plot
-      data={traces}
+      data={withValues(traces, showValues, valueFontSize)}
       layout={layout}
       config={{ displayModeBar: false, responsive: true }}
       style={{ width: '100%', height: `${layout.height}px` }}

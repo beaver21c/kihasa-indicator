@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { loadRegion } from '../utils/dataLoader';
-import { getCmpStats, flattenSigungu } from '../utils/stats';
+import { getCmpStats, flattenSigungu, pickYearBlock, filledYears } from '../utils/stats';
 import { CAT_ORDER, TYPE7_LABEL, CMP_OPTIONS, BRAND } from '../utils/constants';
 import Sidebar from '../components/Sidebar';
 import RegionSelector from '../components/RegionSelector';
@@ -13,6 +13,7 @@ export default function RegionReport() {
   const [err, setErr] = useState(null);
   const [state, setState] = useState({ sido: '', sgg: '', cmpMode: 'sido', year: '' });
   const [saving, setSaving] = useState(false);
+  const [collapsed, setCollapsed] = useState({}); // 영역(카테고리) 그룹 접기
   const reportRef = useRef(null);
 
   useEffect(() => {
@@ -35,12 +36,13 @@ export default function RegionReport() {
       .catch((e) => setErr(e.message));
   }, []);
 
-  // 가용 연도 = 모든 지표가 공통으로 가진 연도 (지표0 기준 + 교집합 단순화)
+  // 가용 연도 = 실제 데이터(data_by_year)가 존재하는 모든 연도의 합집합.
+  // 지표마다 생산 주기가 달라(2024·2023 혼재) 교집합만 쓰면 최신 연도를 볼 수 없다.
   const yearOptions = useMemo(() => {
     if (!data) return [];
-    const sets = data.indicators.map((i) => new Set(i.years.map(String)));
-    const common = [...sets[0]].filter((y) => sets.every((s) => s.has(y)));
-    return common.sort();
+    const ys = new Set();
+    data.indicators.forEach((i) => filledYears(i).forEach((y) => ys.add(y)));
+    return [...ys].sort();
   }, [data]);
 
   // 카테고리별 그룹
@@ -120,12 +122,22 @@ export default function RegionReport() {
 
         {grouped.map(({ cat, items }) => (
           <section key={cat} className="mb-4">
-            <h3 className="text-sm font-bold text-[#1a4f8a] bg-slate-50 px-3 py-1.5 rounded-md mb-1">
-              {cat}
-            </h3>
-            {items.map((ind) => {
-              const yearBlock = ind.data_by_year[year];
-              const flat = flattenSigungu(yearBlock);
+            <button
+              type="button"
+              onClick={() => setCollapsed((c) => ({ ...c, [cat]: !c[cat] }))}
+              className="w-full flex items-center justify-between text-sm font-bold text-[#1a4f8a] bg-slate-50 px-3 py-1.5 rounded-md mb-1 hover:bg-slate-100"
+            >
+              <span>
+                {cat} <span className="text-[11px] font-normal text-slate-400">({items.length}개)</span>
+              </span>
+              <span className={`text-[10px] text-slate-400 transition-transform ${collapsed[cat] ? '' : 'rotate-180'}`}>
+                ▼
+              </span>
+            </button>
+            {!collapsed[cat] && items.map((ind) => {
+              // 선택 연도 값이 없으면 그보다 앞선 최근 유효 연도로 대체하고 배지로 알린다.
+              const useYear = pickYearBlock(ind, year);
+              const flat = flattenSigungu(useYear ? ind.data_by_year[useYear] : null);
               const targetVal = flat[state.sgg];
               const stats = getCmpStats(flat, areas, state.cmpMode, state.sido, state.sgg);
               return (
@@ -134,6 +146,7 @@ export default function RegionReport() {
                   indicator={ind}
                   stats={stats}
                   targetVal={targetVal}
+                  yearNote={useYear && useYear !== year ? useYear : null}
                 />
               );
             })}

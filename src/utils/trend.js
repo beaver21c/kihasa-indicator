@@ -1,6 +1,6 @@
 // 연도별 추이 시계열 빌더 (지역중심 19개 지표 / data_by_year 기반)
 // 기존 stats.js 유틸을 연도별로 반복 호출하여 시계열을 구성한다 (신규 데이터 빌드 불필요).
-import { flattenSigungu, getCmpStats } from './stats';
+import { filledYears, flattenSigungu, getCmpStats } from './stats';
 
 const num = (v) => (v == null || isNaN(v) ? null : Number(v));
 
@@ -39,10 +39,13 @@ export function buildIndicatorTrend(indicator, opts) {
   return { years, regionSeries, band, nationalAvg };
 }
 
-// 추이 페이지에서 사용할 가용 연도: 모든 지표 공통 연도 중 2018년 이상
+// 추이 페이지 가용 연도: 실제 데이터(data_by_year)가 있는 연도의 합집합 중 2018년 이상.
+// 지표마다 생산 주기가 달라 교집합만 쓰면 최신 연도가 통째로 빠진다(값 없는 지표는 결측 처리).
 export function trendYears(indicators) {
   if (!indicators?.length) return [];
-  const sets = indicators.map((i) => new Set((i.years || []).map(String)));
-  const common = [...sets[0]].filter((y) => sets.every((s) => s.has(y)) && Number(y) >= 2018);
-  return common.sort();
+  const ys = new Set();
+  for (const i of indicators) {
+    for (const y of filledYears(i)) if (Number(y) >= 2018) ys.add(y);
+  }
+  return [...ys].sort();
 }
