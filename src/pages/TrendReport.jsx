@@ -7,6 +7,7 @@ import RegionSelector from '../components/RegionSelector';
 import MultiRegionSelector from '../components/MultiRegionSelector';
 import TrendCard from '../components/TrendCard';
 import TrendModal from '../components/TrendModal';
+import FontStepper from '../components/FontStepper';
 import { saveReportPng } from '../utils/png';
 
 export default function TrendReport() {
@@ -17,6 +18,7 @@ export default function TrendReport() {
     sido: '', sgg: '', cmpMode: 'sido',
     regions: [], showRefLine: true,
     yearFrom: '', yearTo: '', chartType: 'line',
+    showValues: false, valueFs: 9,
   });
   const [expanded, setExpanded] = useState(null); // 확대할 indicator
   const [saving, setSaving] = useState(false);
@@ -148,6 +150,28 @@ export default function TrendReport() {
           </div>
         </div>
 
+        {/* 그래프 값 표시 */}
+        <div className="mt-3 pt-3 border-t border-slate-100">
+          <label className="flex items-center text-xs text-slate-600 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={state.showValues}
+              onChange={(e) => setState({ ...state, showValues: e.target.checked })}
+              className="mr-2 accent-[#1a4f8a]"
+            />
+            그래프 값 표시
+          </label>
+          {state.showValues && (
+            <div className="mt-1.5">
+              <FontStepper
+                value={state.valueFs}
+                onChange={(v) => setState({ ...state, valueFs: v })}
+                caption="값 글자"
+              />
+            </div>
+          )}
+        </div>
+
         <button
           onClick={onSave}
           disabled={saving || !hasRegions}
@@ -205,6 +229,8 @@ export default function TrendReport() {
                     mode={state.mode}
                     chartType={state.chartType}
                     showRefLine={state.showRefLine}
+                    showValues={state.showValues}
+                    valueFontSize={state.valueFs}
                     onExpand={() => setExpanded(ind)}
                   />
                 ))}
@@ -221,6 +247,8 @@ export default function TrendReport() {
           buildTrend={buildTrend}
           mode={state.mode}
           defaultChartType={state.chartType}
+          showValues={state.showValues}
+          valueFontSize={state.valueFs}
           onClose={() => setExpanded(null)}
         />
       )}

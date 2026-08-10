@@ -11,7 +11,8 @@ function fmt(v) {
 
 // indicator: {name, unit, sheet/category}
 // stats: 비교통계 {min,max,avg,q1,q3,n}, targetVal: 선택지역 값
-export default function IndicatorRow({ indicator, stats, targetVal, areaLabel }) {
+// yearNote: 선택 연도와 실제 사용 연도가 다를 때 표시할 연도(생산 주기 차이 대응)
+export default function IndicatorRow({ indicator, stats, targetVal, areaLabel, yearNote }) {
   return (
     <div className="grid grid-cols-12 gap-2 items-center py-2.5 border-b border-slate-100">
       {/* 좌(3): 지표명 + 단위 + 영역 */}
@@ -20,6 +21,14 @@ export default function IndicatorRow({ indicator, stats, targetVal, areaLabel })
         <div className="text-xs text-slate-400 mt-0.5">
           단위: {indicator.unit || '–'}
           {areaLabel && <span className="ml-1 text-slate-300">· {areaLabel}</span>}
+          {yearNote && (
+            <span
+              className="ml-1 px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px]"
+              title="이 지표는 선택 연도 값이 없어 가장 가까운 최근 연도 값을 표시한다"
+            >
+              {yearNote}년 값
+            </span>
+          )}
         </div>
       </div>
 

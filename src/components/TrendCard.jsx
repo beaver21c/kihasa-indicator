@@ -1,7 +1,16 @@
 import TrendChart from './TrendChart';
 
 // 그리드 미니 추이 카드 (클릭 시 확대)
-export default function TrendCard({ indicator, trend, mode, chartType, showRefLine, onExpand }) {
+export default function TrendCard({
+  indicator,
+  trend,
+  mode,
+  chartType,
+  showRefLine,
+  showValues,
+  valueFontSize,
+  onExpand,
+}) {
   return (
     <button
       type="button"
@@ -20,6 +29,8 @@ export default function TrendCard({ indicator, trend, mode, chartType, showRefLi
         chartType={chartType}
         unit={indicator.unit}
         showRefLine={showRefLine}
+        showValues={showValues}
+        valueFontSize={valueFontSize}
         compact
       />
       <div className="text-[10px] text-slate-300 text-right -mt-1 group-hover:text-[#1a4f8a]">확대 ↗</div>

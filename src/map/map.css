@@ -1,0 +1,82 @@
+/* GIS 지도분석(/map) 전용 스타일 — rcssp_map index.css 에서 이관.
+   전역 index.css 를 오염시키지 않도록 지도 화면에서만 import 한다. */
+
+/* Leaflet 컨테이너 */
+.leaflet-container {
+  background: #f1f5f9;
+  font-family: inherit;
+}
+
+/* 지역명 라벨 (소형 회색 텍스트) */
+.region-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-size: 10px;
+  color: #6b7280;
+  font-weight: 400;
+  text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  pointer-events: none;
+  white-space: nowrap;
+  padding: 0 !important;
+}
+
+/* 기관 위치 마커 (회색 ✕ + 선택적 기관명) */
+.inst-divicon {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.inst-x {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  color: #374151;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  pointer-events: auto; /* ✕ 위에 마우스를 올리면 툴팁(기관명·주소) 표시 */
+  cursor: pointer;
+}
+.inst-name {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 10px;
+  color: #374151;
+  text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  pointer-events: none;
+}
+
+.leaflet-interactive:hover {
+  filter: brightness(1.05);
+}
+
+/* 기관 마커 호버 툴팁(기관명·주소) */
+.inst-tip .inst-tip-addr {
+  font-size: 11px;
+  color: #475569;
+  margin-top: 2px;
+}
+
+/* 모바일 (<= 767px) */
+@media (max-width: 767px) {
+  .leaflet-control-zoom {
+    margin-right: 8px !important;
+    margin-top: 8px !important;
+  }
+  .region-label {
+    font-size: 9px;
+  }
+}
+
+/* 태블릿 (768~1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .region-label {
+    font-size: 9px;
+  }
+}
